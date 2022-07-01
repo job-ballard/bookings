@@ -11,9 +11,14 @@
         rel="stylesheet" 
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" 
         crossorigin="anonymous">
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker-bs5.min.css">
+      <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+
       <style>
         .my-footer{background-color: #163b65; margin-top: 1.5em; height: 5em; padding: 1em; color: white;}
         .room-image{max-width: 50%;}
+        .redText{color: red;}
       </style>
     </head>
 
@@ -64,25 +69,31 @@
         <div class="col-md-6">
           <h1 class="text-center mt-5">Check for Availability</h1>
           
-          <form action="./reservation.html" method="post">
+          <form action="./reservation.html" method="post" novalidate class="needs-validation" id="reservation-dates">
             <div class="form row">
               <div class="col">
                 <div class="mb-3">
-                  <label for="start_date" class="form-label">Starting date</label>
-                  <input required type="date" class="form-control" id="start_date" name="start_date" aria-describedby="startDateHelp">
-                  <div id="startDateHelp" class="form-text">Enter your starting date in the form of YYYY-MM-DD.</div>
+                  <label for="start" class="form-label">Starting date</label>
+                  <input required type="text" class="form-control" id="start" name="start" aria-describedby="startDateHelp" placeholder="Arrival">
+                  <!-- <div id="startDateHelp" class="form-text">Enter your starting date in the form of YYYY-MM-DD.</div> -->
                 </div>
               </div>
               <div class="col">
                 <div class="mb-3">
-                  <label for="end_date" class="form-label">Ending date</label>
-                  <input required type="date" class="form-control" id="end_date" name="end_date" aria-describedby="endDateHelp">
-                  <div id="endDateHelp" class="form-text">Enter your ending date in the form of YYYY-MM-DD.</div>
+                  <label for="end" class="form-label">Ending date</label>
+                  <input required type="text" class="form-control" id="end" name="end" aria-describedby="endDateHelp" placeholder="Depature">
+                  <!-- <div id="endDateHelp" class="form-text">Enter your ending date in the form of YYYY-MM-DD.</div> -->
                 </div>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary">Search Availability</button>
 
+            <div class="row">
+              <div class="col">
+                <button type="submit" class="btn btn-primary">Search Availability</button>
+              </div>
+            </div>
+              
+            </div>
           </form>
 
           <p class="mt-4">
@@ -90,7 +101,14 @@
           </p>
         </div>
       </div>
+      <div class="row">
+        <div class="col">
+          <c class="btn btn-primary" id="colorButton">Search Availability</a>
+        </div>
+      </div>
     </div>
+
+
 
     <div class="row my-footer">
       <div class="col">Left</div>
@@ -108,6 +126,141 @@
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" 
       integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" 
       crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/datepicker-full.min.js"></script>
+    <script src="https://unpkg.com/notie"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+
+      let attention = Prompt();
+      
+      const elem = document.getElementById('reservation-dates');
+      const rangepicker = new DateRangePicker(elem, {
+        format:"yyyy-mm-dd",
+        // ...options
+      }); 
+      
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+          form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+          }, false)
+        })
+      })()
+
+      function notify(msg, type){
+        notie.alert({
+        type: type, // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+        text: msg,
+      })
+      }
+
+      // Code for lose button on the page
+      document.getElementById("colorButton").addEventListener("click", function(){
+        // notifyModal("Avaaas!", "Me hearties! There be land yonder.", "error", "Aye aye, Captn!")
+        // attention.toast({msg: "Hello world!"});
+        attention.error({text: "Something went wrong!",  title: "Yikes!", footer: "<a href=\"\">Solve this issue?</a>"});
+        // attention.success({});
+      })
+
+      // notify("msg", "neutral")
+      function notifyModal(title, text, error, confirmButtonText){
+        Swal.fire({
+          title: title,
+          text: text,
+          icon: error,
+          confirmButtonText: confirmButtonText
+        })
+      }
+
+      
+
+      function Prompt(){
+        let toast = function(c){
+          const {
+            msg = "",
+            icon = "success",
+            position = "top-end",
+            title = "Saved!",
+            footer = "<a href=\"\">Why do I have this issue?</a>",
+          } = c;
+
+          const Toast = Swal.mixin({
+            toast: true,
+            title: msg,
+            icon: icon,
+            position: position,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+
+          Toast.fire({})
+        }
+
+        let success =function(c){
+          const {
+            text = "",
+            title = "Saved!",
+            footer = "<a href=\"\">Why do I have this issue?</a>",
+          } = c;
+          
+          Swal.fire({
+            icon: 'success',
+            text: text,
+            title: title,
+            footer: footer,
+          })
+        }
+        
+        let error =function(c){
+          const {
+            text = "",
+            title = "Saved!",
+            footer = "",
+          } = c;
+          
+          Swal.fire({
+            icon: 'error',
+            text: text,
+            title: title,
+            footer: footer,
+          })
+        }
+
+        function custom(c){
+          const {
+            text = "",
+            title = "Saved!",
+          } = c;
+
+          const {value: formValues} = 
+        }
+
+        return{
+          toast: toast,
+          success: success,
+          error: error,
+        }
+      }
+      
     </script>
   </body>
 </html>
