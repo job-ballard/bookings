@@ -14,12 +14,7 @@
       
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker-bs5.min.css">
       <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
-
-      <style>
-        .my-footer{background-color: #163b65; margin-top: 1.5em; height: 5em; padding: 1em; color: white;}
-        .room-image{max-width: 50%;}
-        .redText{color: red;}
-      </style>
+      <link rel="stylesheet" type="text/css" href="./static/">
     </head>
 
     <body>
@@ -110,6 +105,13 @@
 
 
 
+
+
+
+    
+
+
+
     <div class="row my-footer">
       <div class="col">Left</div>
       <div class="col">Middle</div>
@@ -170,10 +172,23 @@
 
       // Code for lose button on the page
       document.getElementById("colorButton").addEventListener("click", function(){
+
+        let html = `
+          <form id="check-avilability-form" action="" method="post" class="needs-validation" novalidate>
+            <div class="form row" id="reservation-dates-modal">
+              <div class="col">
+                <input disabled required class="form-control" name="start2" id="start2" placeholder="Arrival">
+              </div>
+              <div class="col">
+                <input disabled required class="form-control" name="end2" id="end2" placeholder="Departure">
+              </div>
+            </div>
+          </form>
+        `;
+
         // notifyModal("Avaaas!", "Me hearties! There be land yonder.", "error", "Aye aye, Captn!")
         // attention.toast({msg: "Hello world!"});
-        attention.error({text: "Something went wrong!",  title: "Yikes!", footer: "<a href=\"\">Solve this issue?</a>"});
-        // attention.success({});
+        attention.custom({msg: html,title: "Choose your dates",});
       })
 
       // notify("msg", "neutral")
@@ -245,19 +260,47 @@
           })
         }
 
-        function custom(c){
+        async function custom(c){
           const {
-            text = "",
+            msg = "",
             title = "Saved!",
           } = c;
 
-          const {value: formValues} = 
+          const { value: formValues } = await Swal.fire({
+            title: title,
+            html: msg,
+            backdrop: false,
+            focusConfirm: false,
+            showCancelButton: true,
+            willOpen: () => {
+              const elem = document.getElementById('reservation-dates-modal');
+              const rp = new DateRangePicker(elem, {
+                format: 'yyyy-mm-dd',
+                showOnFocus: true,
+              })
+            },
+            preConfirm: () => {
+              return [
+                document.getElementById('start2').value,
+                document.getElementById('end2').value
+              ]
+            },
+            didOpen: () => {
+              document.getElementById('start2').removeAttribute('disabled');
+              document.getElementById('end2').removeAttribute('disabled');
+            }
+          })
+
+          if (formValues) {
+            Swal.fire(JSON.stringify(formValues))
+          }
         }
 
         return{
           toast: toast,
           success: success,
           error: error,
+          custom: custom,
         }
       }
       
