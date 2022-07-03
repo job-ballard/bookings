@@ -1,0 +1,45 @@
+{{template "base" .}}
+
+{{define "content"}}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <h1 class="text-center mt-5">Check for Availability</h1>
+      
+      <form action="./reservation.html" method="post" novalidate class="needs-validation" id="reservation-dates">
+        <div class="form row">
+          <div class="col">
+            <div class="mb-3">
+              <label for="start" class="form-label">Starting date</label>
+              <input required type="text" class="form-control" id="start" name="start" aria-describedby="startDateHelp" placeholder="Arrival">
+              <!-- <div id="startDateHelp" class="form-text">Enter your starting date in the form of YYYY-MM-DD.</div> -->
+            </div>
+          </div>
+          <div class="col">
+            <div class="mb-3">
+              <label for="end" class="form-label">Ending date</label>
+              <input required type="text" class="form-control" id="end" name="end" aria-describedby="endDateHelp" placeholder="Depature">
+              <!-- <div id="endDateHelp" class="form-text">Enter your ending date in the form of YYYY-MM-DD.</div> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <button type="submit" class="btn btn-primary">Search Availability</button>
+          </div>
+        </div>
+          
+        </div>
+      </form>
+
+      <p class="mt-4">
+        
+      </p>
+    </div>
+  </div>
+</div>
+
+{{end}}
