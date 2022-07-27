@@ -25,9 +25,34 @@
   </div>
   <div class="row">
     <div class="col text-center">
-      <a href="/search-availability" class="btn btn-success">Check Availability</a>
+      <a id="check-availability-button" href="#" class="btn btn-success">Check Availability</a>
     </div>
   </div>
 </div>
 
+{{end}}
+
+{{define "js"}}
+  <script>
+    // Code for lose button on the page
+    document.getElementById("check-availability-button").addEventListener("click", function(){
+
+    let html = `
+      <form id="check-avilability-form" action="" method="post" class="needs-validation" novalidate>
+        <div class="form row" id="reservation-dates-modal">
+          <div class="col">
+            <input disabled required class="form-control" name="start2" id="start2" placeholder="Arrival">
+          </div>
+          <div class="col">
+            <input disabled required class="form-control" name="end2" id="end2" placeholder="Departure">
+          </div>
+        </div>
+      </form>
+    `;
+
+    // notifyModal("Avaaas!", "Me hearties! There be land yonder.", "error", "Aye aye, Captn!")
+    // attention.toast({msg: "Hello world!"});
+    attention.custom({msg: html,title: "Choose your dates",});
+    })
+  </script>
 {{end}}
