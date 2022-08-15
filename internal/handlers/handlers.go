@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/jo-msanii/bookings/pkg/config"
-	"github.com/jo-msanii/bookings/pkg/models"
-	"github.com/jo-msanii/bookings/pkg/render"
+	"github.com/jo-msanii/bookings/internal/config"
+	"github.com/jo-msanii/bookings/internal/models"
+	"github.com/jo-msanii/bookings/internal/render"
 )
 
 // Repo the repository used by the handlers
@@ -90,7 +90,7 @@ type jsonResponse struct {
 func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	resp := jsonResponse{
 		OK:      true,
-		Message: "Available",
+		Message: "Available!",
 	}
 
 	out, err := json.MarshalIndent(resp, "", "     ")

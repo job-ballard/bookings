@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/jo-msanii/bookings/pkg/config"
-	"github.com/jo-msanii/bookings/pkg/models"
+	"github.com/jo-msanii/bookings/internal/config"
+	"github.com/jo-msanii/bookings/internal/models"
 	"github.com/justinas/nosurf"
 )
 

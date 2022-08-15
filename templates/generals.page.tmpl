@@ -36,23 +36,64 @@
   <script>
     // Code for lose button on the page
     document.getElementById("check-availability-button").addEventListener("click", function(){
-
-    let html = `
-      <form id="check-avilability-form" action="" method="post" class="needs-validation" novalidate>
-        <div class="form row" id="reservation-dates-modal">
-          <div class="col">
-            <input disabled required class="form-control" name="start2" id="start2" placeholder="Arrival">
+      let html = `
+        <form id="check-avilability-form" action="" method="post" class="needs-validation" novalidate>
+          <div class="form row" id="reservation-dates-modal">
+            <div class="col">
+              <input disabled required class="form-control" name="start2" id="start2" placeholder="Arrival">
+            </div>
+            <div class="col">
+              <input disabled required class="form-control" name="end2" id="end2" placeholder="Departure">
+            </div>
           </div>
-          <div class="col">
-            <input disabled required class="form-control" name="end2" id="end2" placeholder="Departure">
-          </div>
-        </div>
-      </form>
-    `;
+        </form>
+      `;
 
-    // notifyModal("Avaaas!", "Me hearties! There be land yonder.", "error", "Aye aye, Captn!")
-    // attention.toast({msg: "Hello world!"});
-    attention.custom({msg: html,title: "Choose your dates",});
+      // notifyModal("Avaaas!", "Me hearties! There be land yonder.", "error", "Aye aye, Captn!")
+      // attention.toast({msg: "Hello world!"});
+      attention.custom({
+        msg: html,
+        title: "Choose your dates",
+
+        willOpen: () => {
+          const elem = document.getElementById('reservation-dates-modal');
+          const rp = new DateRangePicker(elem, {
+            format: 'yyyy-mm-dd',
+            showOnFocus: true,
+          })
+        },
+
+        preConfirm: () => {
+          return [
+            document.getElementById('start2').value,
+            document.getElementById('end2').value
+          ]
+        },
+
+        didOpen: () => {
+          document.getElementById('start2').removeAttribute('disabled');
+          document.getElementById('end2').removeAttribute('disabled');
+        },
+
+        callback: function(result) {
+          console.log("called");
+
+          let form = document.getElementById("check-avilability-form");
+          let formData = new FormData(form);
+          formData.append("csrf_token", "{{.CSRFToken}}");
+
+          fetch('/search-availability-json',{
+            method: "post",
+            body: formData,
+          })
+            .then(response => response.json())
+            .then(data => {
+              console.log(data);
+              console.log(data.ok);
+              console.log(data.message);
+            })
+        }
+      });
     })
   </script>
 {{end}}
